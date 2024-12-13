@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Generation</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid">
+
+    <div class="container">
+
+        <div class="container">
+            <h1 class="display-6 fw-bold"> GenAImg </h1>
+        </div>
+
+        <div class="container mt-3">
+            <figure class="text-center">
+                <blockquote class="blockquote">
+                    <p>I believe AI is going to change the world more than anything in the history of humanity. More than electricity.</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                    Kai-fu Lee from <cite title="Source Title">San Francisco</cite>
+                </figcaption>
+            </figure>
+        </div>
+
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col">
+                    <p class="lead">Can you share your thoughts with me? It will only be between us.</p>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 200px"></textarea>
+                        <label class="fw-lighter" for="floatingTextarea2">Text here...</label>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-2">
+                        <button type="button" class="btn btn-secondary" id="btn-gen-img">Generate Image</button>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="border border-2" style="width: 550px; height: 550px;">
+                        <img src="" class="img-thumbnail" alt="..." style="height: 550px;" id="generateImage">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+<script>
+    const btn = document.getElementById('btn-gen-img');
+
+    btn.addEventListener('click', async (event) => {
+        const text = document.getElementById('floatingTextarea2').value;
+        try {
+            const response = await fetch('http://localhost:3000/drawing/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ text }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Cannot receive response');
+            }
+
+            const blob = await response.blob();
+            const imageUrl = URL.createObjectURL(blob);
+
+            document.getElementById('generateImage').src = imageUrl;
+        } catch (error) {
+            console.log('Error get image:' + error);
+        }
+    });
+</script>
+
+</body>
+</html>

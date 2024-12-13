@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat View</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+    <h1>Chat App</h1>
+    <div id="messages"></div>
+    <input id="messageInput" placeholder="Type your message here"/>
+    <button onclick="sendMessage()"> Send </button>
+
+    <script>
+        const socket = io('http://localhost:3000');     // Kết nối tới WebSocket server
+
+        // Lắng nghe sự kiện 'message' từ server
+        socket.on('hello', (message) => {
+            console.log('Receiving message from server...');
+            const messageDiv = document.getElementById('messages');
+            messageDiv.innerText = `${message}`;
+            console.log('Received message from server!!!');
+        });
+
+        // Gửi tin nhắn đến server
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value
+            messageInput.value = '';
+
+            console.log('Connecting to server...')
+            socket.emit('message', message); // Gửi sự kiện 'message' với dữ liệu là nội dung tin nhắn
+            console.log("Data is sent to server!!!");
+        }
+    </script>
+</body>
+</html>

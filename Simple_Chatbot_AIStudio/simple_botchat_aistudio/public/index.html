@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Botchat</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="container">
+
+      <div class="header mt-5">
+        <h1>Simple Botchat</h1>
+      </div>
+
+      <div class="body">
+
+        <div class="question">
+          <h5 class="mt-5 mb-3">
+            Your Question
+          </h5>
+          <div class="form-floating">
+            <textarea class="form-control" placeholder="Let ask me" id="floatingTextarea1" style="height: 150px"></textarea>
+          </div>
+          <button type="button" class="btn btn-primary mt-2" id="btn">Send</button>
+        </div>
+
+        <div class="answer">
+          <h5 class="mt-5 mb-3">
+            My Response
+          </h5>
+          <div class="form-floating">
+            <textarea readonly class="form-control" placeholder="This is my reply" id="floatingTextarea2" style="height: 250px"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script>
+    const btn = document.getElementById('btn');
+    btn.addEventListener('click', (event) => {
+
+      const prompt = document.getElementById('floatingTextarea1').value;
+      console.log(prompt);
+
+      // Gửi yêu cầu HTTP đến backend
+      fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt: prompt })
+      })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('floatingTextarea2').value = data.answer; // Hiển thị câu trả lời
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+
+  </script>
+</body>
+</html>
